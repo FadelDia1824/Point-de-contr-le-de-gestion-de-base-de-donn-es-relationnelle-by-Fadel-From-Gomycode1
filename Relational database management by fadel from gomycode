@@ -1,0 +1,92 @@
+1-Modele relationnel
+Producer ( ID_Producer, FirstName, LastName, region )
+Wine( ID_wine ,Name_Wine category , year , degree )
+Harvest( #ID Producer, #ID_Wine,ID_harvest, quantity )
+2-Implementation du modele relationnel en SQL
+
+CREATE TABLE Producer (
+    ID_Producer INTEGER,
+    FirstName TEXT,
+    LastName TEXT,
+    Region TEXT , 
+    PRIMARY KEY ( ID_Producer)
+)
+
+CREATE TABLE wine (
+    ID_wine INTEGER,
+    Name_wine TEXT,
+    category TEXT,
+    year DATE,
+    degree INTEGER,
+    PRIMARY KEY ( ID_Wine)
+   )
+
+CREATE TABLE harvest (
+ID_harvest INTEGER,
+ID_Producer INTEGER,
+ID_Wine INTEGER,
+Quantity FLOAT,
+PRIMARY KEY (ID_harvest),
+FOREIGN KEY (ID_Producer) REFERENCES Producer(ID_Producer),
+FOREIGN KEY (ID_Wine) REFERENCES wine(ID_wine )
+)
+
+
+
+
+3- Insérez des données dans les tables de la base de données
+INSERT INTO producer(ID_Producer,FirstName, LastName, Region)
+VALUES
+(1824,'Fadel','Dia', 'Sousse'),
+(5021,'Cellou','Diallo', 'Dakar'),
+(4256, 'Fatou','Kiné', 'Sousse')
+
+
+INSERT INTO wine (ID_wine,Name_wine,category,year,degree,)
+VALUES
+
+ (12,‘heineken’,’Vin_blanc’,1990,26),
+(14,Royal Dutch,’vin rouge’,1995,35),
+(16, ‘Cava’,’vin mousseux’, 2010,28)
+
+
+INSERT INTO harvest (ID_harvest,ID_Producer,ID_Wine,Quantity)
+VALUES
+(1,1824,12,350),
+(3,4256,16,300);
+(2,5021,14,295),
+
+4) 
+SELECT * FROM producer
+5) Trier la liste des producteurs producteur par nom
+SELECT FirstName, LastName FROM producer ORDER BY LastName ASC
+
+6)Donnez la liste des producteurs de sousse
+
+SELECT * FROM PRODUCER WHERE Region = 'Sousse'
+
+7) Quantité totale de vin produit pour le numéro 12
+
+SELECT SUM(Quantity) FROM HARVEST WHERE ID_Wine = 12 ;
+
+8)Calculez la quantité de vin produite par catégorie
+
+
+SELECT w.Category, SUM(h.Quantity)
+FROM Harvest h
+JOIN Wine w ON h.ID_WINE = w.ID_Wine
+GROUP BY w.Category;
+
+9-Les producteurs de la région de Sousse ont récolté au moins un vin en quantité supérieure à 300 litres Nous souhaitons les noms et prénoms des producteurs, triés par ordre alphabétique.
+
+SELECT p.FirstName, p.LastName , h.Quantity
+FROM Producer p
+JOIN Harvest h ON p.ID_Producer = h.ID_Producer 
+WHERE h.Quantity > 300 GROUP BY p.ID_Producer ORDER BY LastName ASC ;
+10-
+
+SELECT p.FirstName , p.LastName , w.Name_Wine , w.degree FROM  PRODUCER p JOIN harvest ON p.ID_Producer = h.ID_Producer
+JOIN wine w ON w.id_WINE = h.ID_Wine
+WHERE p.ID_Producer = 24 AND w.degree > 12 ;
+
+
